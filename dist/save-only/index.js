@@ -93781,7 +93781,7 @@ const region = process.env.RUNS_ON_AWS_REGION ||
 const uploadQueueSize = Number(process.env.UPLOAD_QUEUE_SIZE || "4");
 const uploadPartSize = Number(process.env.UPLOAD_PART_SIZE || "32") * 1024 * 1024;
 const downloadQueueSize = Number(process.env.DOWNLOAD_QUEUE_SIZE || "8");
-const downloadPartSize = Number(process.env.DOWNLOAD_PART_SIZE || "4") * 1024 * 1024;
+const downloadPartSize = Number(process.env.DOWNLOAD_PART_SIZE || "16") * 1024 * 1024;
 function getCacheVersion(paths, compressionMethod, enableCrossOsArchive = false) {
     // don't pass changes upstream
     const components = paths.slice();
