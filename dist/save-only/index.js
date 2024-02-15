@@ -93779,6 +93779,8 @@ const bucketName = process.env.RUNS_ON_S3_BUCKET_CACHE;
 const region = process.env.RUNS_ON_AWS_REGION ||
     process.env.AWS_REGION ||
     process.env.AWS_DEFAULT_REGION;
+const cachePartSize = Number(process.env.CACHE_PART_SIZE || "32") * 1024 * 1024;
+const cacheQueueSize = Number(process.env.CACHE_QUEUE_SIZE || "10");
 function getCacheVersion(paths, compressionMethod, enableCrossOsArchive = false) {
     // don't pass changes upstream
     const components = paths.slice();
@@ -93855,7 +93857,7 @@ function downloadCache(archiveLocation, archivePath, options) {
         const url = yield getSignedUrl(s3Client, command, {
             expiresIn: 3600
         });
-        const downloadOptions = (0, options_1.getDownloadOptions)(Object.assign(Object.assign({}, options), { downloadConcurrency: 14, concurrentBlobDownloads: true }));
+        const downloadOptions = (0, options_1.getDownloadOptions)(Object.assign(Object.assign({}, options), { downloadConcurrency: cacheQueueSize, concurrentBlobDownloads: true }));
         yield (0, downloadUtils_1.downloadCacheHttpClientConcurrent)(url, archivePath, downloadOptions);
     });
 }
@@ -93882,16 +93884,17 @@ function saveCache(key, paths, archivePath, { compressionMethod, enableCrossOsAr
                 Body: (0, fs_1.createReadStream)(archivePath)
             },
             // Part size in bytes
-            partSize: 32 * 1024 * 1024,
+            partSize: cachePartSize,
             // Max concurrency
-            queueSize: 14
+            queueSize: cacheQueueSize
         });
         // Commit Cache
         const cacheSize = utils.getArchiveFileSizeInBytes(archivePath);
         core.info(`Cache Size: ~${Math.round(cacheSize / (1024 * 1024))} MB (${cacheSize} B)`);
+        const totalParts = Math.ceil(cacheSize / cachePartSize);
         core.info(`Uploading cache from ${archivePath} to ${bucketName}/${s3Key}`);
         multipartUpload.on("httpUploadProgress", progress => {
-            core.info(`Uploaded ${progress.part}/${progress.total}.`);
+            core.info(`Uploaded part ${progress.part}/${totalParts}.`);
         });
         yield multipartUpload.done();
         core.info(`Cache saved successfully.`);
