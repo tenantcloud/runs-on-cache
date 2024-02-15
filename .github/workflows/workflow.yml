@@ -21,7 +21,9 @@ jobs:
       uses: actions/checkout@v3
     - name: Generate files in working directory
       shell: bash
-      run: __tests__/create-cache-files.sh ${{ runner.os }} test-cache
+      run: |
+        __tests__/create-cache-files.sh ${{ runner.os }} test-cache
+        curl -o test-cache/ubuntu.iso https://releases.ubuntu.com/22.04.3/ubuntu-22.04.3-desktop-amd64.iso
     - name: Generate files outside working directory
       shell: bash
       run: __tests__/create-cache-files.sh ${{ runner.os }} ~/test-cache
