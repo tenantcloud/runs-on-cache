@@ -5,12 +5,12 @@ on:
     branches:
       - main
       - releases/**
-      - fix/**
-      - v4
   push:
     branches:
       - main
       - releases/**
+      - fix/**
+      - v4
 
 jobs:
   # End to end save and restore
