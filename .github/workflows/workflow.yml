@@ -16,6 +16,11 @@ jobs:
   # End to end save and restore
   test-save:
     runs-on: runs-on,env=dev,image=ubuntu22-full-arm64
+    strategy:
+      matrix:
+        part_size: [4, 8, 16, 32]
+        queue_size: [2, 4, 8, 12]
+      fail-fast: false
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -32,6 +37,9 @@ jobs:
       run: __tests__/create-cache-files.sh ${{ runner.os }} ~/test-cache
     - name: Save cache
       uses: ./
+      env:
+        UPLOAD_PART_SIZE: ${{ matrix.part_size }}
+        UPLOAD_QUEUE_SIZE: ${{ matrix.queue_size }}
       with:
         key: test-${{ runner.os }}-${{ github.run_id }}
         path: |
@@ -41,8 +49,8 @@ jobs:
     needs: test-save
     strategy:
       matrix:
-        part_size: [16, 32]
-        queue_size: [1, 2, 3, 4, 8, 12]
+        part_size: [4, 8, 16, 32]
+        queue_size: [2, 4, 8, 12]
       fail-fast: false
     runs-on: runs-on,env=dev,image=ubuntu22-full-arm64
     steps:
