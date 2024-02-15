@@ -41,7 +41,8 @@ jobs:
     needs: test-save
     strategy:
       matrix:
-        part_size: [16, 32, 64, 128]
+        part_size: [16, 32]
+        queue_size: [1, 4, 8, 12, 16]
       fail-fast: false
     runs-on: runs-on,env=dev,image=ubuntu22-full-arm64
     steps:
@@ -51,6 +52,7 @@ jobs:
       uses: ./
       env:
         DOWNLOAD_PART_SIZE: ${{ matrix.part_size }}
+        DOWNLOAD_QUEUE_SIZE: ${{ matrix.queue_size }}
       with:
         key: test-${{ runner.os }}-${{ github.run_id }}
         path: |
