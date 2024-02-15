@@ -42,7 +42,7 @@ jobs:
     strategy:
       matrix:
         part_size: [16, 32]
-        queue_size: [1, 4, 8, 12, 16]
+        queue_size: [1, 2, 3, 4, 8, 12]
       fail-fast: false
     runs-on: runs-on,env=dev,image=ubuntu22-full-arm64
     steps:
