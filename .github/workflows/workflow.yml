@@ -64,8 +64,8 @@ jobs:
       with:
         key: test-${{ runner.os }}-${{ github.run_id }}-${{ matrix.part_size }}-${{ matrix.queue_size }}
         restore-keys: |
-          test-${{ runner.os }}-${{ github.run_id }}-${{ matrix.part_size }}-*
-          test-${{ runner.os }}-${{ github.run_id }}-*
+          test-${{ runner.os }}-${{ github.run_id }}-${{ matrix.part_size }}-
+          test-${{ runner.os }}-${{ github.run_id }}-
         path: |
           test-cache
           ~/test-cache
