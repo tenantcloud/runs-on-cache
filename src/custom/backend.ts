@@ -40,7 +40,7 @@ const region =
     process.env.RUNS_ON_AWS_REGION ||
     process.env.AWS_REGION ||
     process.env.AWS_DEFAULT_REGION;
-const forcePathStyle = process.env.RUNS_ON_S3_FORCE_PATH_STYLE || false;
+const forcePathStyle = Boolean(process.env.RUNS_ON_S3_FORCE_PATH_STYLE || false);
 
 const uploadQueueSize = Number(process.env.UPLOAD_QUEUE_SIZE || "4");
 const uploadPartSize =
