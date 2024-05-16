@@ -93787,8 +93787,8 @@ const bucketName = process.env.RUNS_ON_S3_BUCKET_CACHE;
 const region = process.env.RUNS_ON_AWS_REGION ||
     process.env.AWS_REGION ||
     process.env.AWS_DEFAULT_REGION;
-const forcePathStyle = Boolean(process.env.RUNS_ON_S3_FORCE_PATH_STYLE ||
-    process.env.AWS_S3_FORCE_PATH_STYLE);
+const forcePathStyle = process.env.RUNS_ON_S3_FORCE_PATH_STYLE === "true" ||
+    process.env.AWS_S3_FORCE_PATH_STYLE === "true";
 const uploadQueueSize = Number(process.env.UPLOAD_QUEUE_SIZE || "4");
 const uploadPartSize = Number(process.env.UPLOAD_PART_SIZE || "32") * 1024 * 1024;
 const downloadQueueSize = Number(process.env.DOWNLOAD_QUEUE_SIZE || "8");
